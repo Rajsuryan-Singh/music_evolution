@@ -9,7 +9,7 @@ import swifter
 from tqdm import tqdm
 import requests
 
-quick_test = 0                      # Set to 1 if you quickly want to test if everything is working
+quick_test = 0                     # Set to 1 if you quickly want to test if everything is working
 
 
 # Change this to the location of your project directory
@@ -18,7 +18,7 @@ dir = '/home/rajsuryan/Desktop/PopEvol_1960-2020/'
 #Load the billboard dataset
 hot100 = pd.read_csv(dir + 'Data/hot100.csv',encoding='latin1')
 if quick_test:
-    hot100 = hot100.iloc[:30]                                      
+    hot100 = hot100.iloc[:20]                                      
 
 #Setup API credentials
 client_credentials_manager = SpotifyClientCredentials(client_id="8b6b3fab9bb04c17ab4aa187c5dd826b",client_secret="833badffedd8400293eb09d35c096455")
@@ -75,16 +75,16 @@ hot100_previews = hot100_previews[["id", "preview_url", "availability"]]
 hot100_previews = hot100_previews[hot100_previews['availability'] == 1]
 
 
-if quick_test:
-    n = 3    
 
 #Download mp3 files from preview urls
+n = hot100_previews.shape[0]
 for i in tqdm(range(n)): 
     url = hot100_previews.iloc[i]["preview_url"]
     r = requests.get(url, allow_redirects=True)
     fname = dir + 'Data/Song Previews/' + hot100_previews.iloc[i]["id"] + '.mp3'
     with open(fname, 'wb') as f:
         f.write(r.content)
+
 print("All done!")
 
 
