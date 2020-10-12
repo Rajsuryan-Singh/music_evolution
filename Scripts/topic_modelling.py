@@ -28,8 +28,8 @@ lda_timbre.fit(harm_features)
 topics_harm = lda_timbre.transform(harm_features)
 
 #Assemble topics in a dataframe
-df_harm = pd.DataFrame(topics_harm, columns = ["H-Topic:" + str(i) for i in range(8)])
-df_timbre = pd.DataFrame(topics_timbre, columns = ["T-Topic:" + str(i) for i in range(8)])
+df_harm = pd.DataFrame(topics_harm, columns = ["H-Topic:" + str(i) for i in range(1,9)])
+df_timbre = pd.DataFrame(topics_timbre, columns = ["T-Topic:" + str(i) for i in range(1,9)])
 df_topics = pd.concat([df_timbre, df_harm], axis=1)
 
 #Add song title, artist and date

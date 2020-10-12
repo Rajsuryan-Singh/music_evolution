@@ -169,7 +169,7 @@ def main_hlex(songs, CT, chords, preview_dir):
     for i in types:
         for j in types:
             for k in range(12):
-                change = "Harm: " + i + "." + str(k) + "." + j
+                change = i + "." + str(k) + "." + j
                 new_columns[change] = []
                 
     for i in tqdm(range(songs.shape[0])):
@@ -199,5 +199,10 @@ def main_hlex(songs, CT, chords, preview_dir):
 songs = pd.read_csv(data_path + 'hot100_with_tlex.csv')
 songs = songs[songs["availability"] == 1]
 songs_final = main_hlex(songs, CT, chords, preview_dir)
-songs_final.to_csv(data_path + "hot100_all_features.csv")
+
+#Renaming columns
+col_to_rename = songs_final.columns[-193:]
+col_map = {i:"Harm: " + i for i in col_to_rename}
+songs_final.rename(columns = col_map)
+songs_final.to_csv(data_path + "hot_100_all_features.csv")
 print("Calculation of H-Lexicon done!")
