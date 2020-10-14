@@ -13,10 +13,10 @@ quick_test = 0                     # Set to 1 if you quickly want to test if eve
 
 
 # Change this to the location of your project directory
-dir = '/home/rajsuryan/Desktop/PopEvol_1960-2020/'
+data_path = '/home/rajsuryan/Desktop/PopEvol_1960-2020/Data/'
 
 #Load the billboard dataset
-hot100 = pd.read_csv(dir + 'Data/hot100.csv',encoding='latin1')
+hot100 = pd.read_csv(data_path + 'hot100.csv',encoding='latin1')
 if quick_test:
     hot100 = hot100.iloc[:20]                                      
 
@@ -40,7 +40,7 @@ def get_ID(track, artist):
         
         
 
-id_fname = dir + 'Data/hot100_IDs.csv'
+id_fname = data_path + 'hot100_IDs.csv'
 
 
 if not os.path.exists(id_fname):
@@ -49,7 +49,7 @@ if not os.path.exists(id_fname):
     hot100.to_csv(id_fname)
 
 
-preview_fname = dir + 'Data/hot100_previews.csv'
+preview_fname = data_path + 'hot100_previews.csv'
 
 
 if not os.path.exists(preview_fname):
@@ -81,7 +81,7 @@ n = hot100_previews.shape[0]
 for i in tqdm(range(n)): 
     url = hot100_previews.iloc[i]["preview_url"]
     r = requests.get(url, allow_redirects=True)
-    fname = dir + 'Data/Song Previews/' + hot100_previews.iloc[i]["id"] + '.mp3'
+    fname = data_path + 'Song Previews/' + hot100_previews.iloc[i]["id"] + '.mp3'
     with open(fname, 'wb') as f:
         f.write(r.content)
 

@@ -149,14 +149,6 @@ def get_h_lex(likely_chords, corr, num_frames, notes):
             h_lex["NA"] +=1
     return h_lex
 
-#Function to filter spurious chord detections
-def mode(arr):
-    return (scipy.stats.mode(arr)[0][0])
-
-def remove_spurious_chords(likely_chords, nf):
-    n = len(likely_chords)    
-    fixed = [mode(likely_chords[i-nf//2: i+nf//2]) for i in range(nf//2+1, n- nf//2)]
-    return fixed
 
 # The main function to populate the H-Lexicon in the dataframe using the auxillary functions
 
@@ -176,17 +168,9 @@ def main_hlex(songs, CT, chords, preview_dir):
         y, sr = get_song(song_id, preview_dir)                
         y = bandpass(y, sr, order = 6)
         chroma = get_chroma_cqt(y, sr) 
-        chroma_sr = chroma.shape[1]//30        
-        likely_chords, corr = get_likely_chords(chroma, CT, chords)  
-
-        #Tempo detection
-        onset_env = librosa.onset.onset_strength(y, sr=sr)
-        tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)
+        num_frames = chroma.shape[1]//30        
+        likely_chords, corr = get_likely_chords(chroma, CT, chords) 
         
-        num_frames = int(chroma_sr*60/tempo)         # Quarter note
-        # num_frames = int(chroma_sr * 30/tempo)           # Eigth note
-        #Remove spurious chords with window size of two quarter notes
-        likely_chords = remove_spurious_chords(likely_chords, 2*num_frames)
         h_lex = get_h_lex(likely_chords, corr, num_frames, notes)
 
         for j in h_lex.keys():                                # Questionable Scalability! 
@@ -202,6 +186,6 @@ songs_final = main_hlex(songs, CT, chords, preview_dir)
 #Renaming columns
 col_to_rename = songs_final.columns[-193:]
 col_map = {i:"Harm: " + i for i in col_to_rename}
-songs_final.rename(columns = col_map)
-songs_final.to_csv(data_path + "hot_100_all_features.csv")
+songs_final.rename(columns = col_map, inplace = True)
+songs_final.to_csv(data_path + "hot100_all_features_without_smoothening.csv")
 print("Calculation of H-Lexicon done!")
