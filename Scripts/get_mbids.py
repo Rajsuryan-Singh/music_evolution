@@ -56,12 +56,14 @@ for i in tqdm(range(len(songs))):
     payload['artist'] = artists[i]
     try:
         r = requests_retry_session().get('http://ws.audioscrobbler.com/2.0/',  params=payload)
+        track = r.json()["track"]
     except Exception:
         mbids.append("")
     else:
         mbid = ""
-        if "track" in r.json():
-            mbid = r.json()["track"]["mbid"]
+        
+        if "mbid" in track:
+            mbid = track["mbid"]
         mbids.append(mbid)
 
         
