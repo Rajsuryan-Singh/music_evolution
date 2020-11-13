@@ -2,14 +2,22 @@ from sklearn.decomposition import LatentDirichletAllocation as LDA
 import pandas as pd
 import matplotlib as plt
 import re
+import sys
 
-smoothening = 0
-n_topics = 8
+#Setting up modelling parameters based on command line arguments
+
+h_topics = t_topics =  8
+doc_topic_prior = None
+dtp = ""               #String to add to filenames
+if len(sys.argv) > 1:
+    h_topics = int(sys.argv[1])
+    t_topics = int(sys.argv[2])
+    doc_topic_prior = float(sys.argv[3])
+    dtp = sys.argv[3]
+
 data_path = '/home/rajsuryan/Desktop/PopEvol_1960-2020/Data/'
-if smoothening:
-    data = pd.read_csv(data_path + 'hot100_all_features.csv')
-else:
-    data = pd.read_csv(data_path + 'hot100_all_features_without_smoothening.csv')
+
+data = pd.read_csv(data_path + 'hot100_features_with_tags.csv')
 
 
 #Get column names for timbre and harmony features
@@ -25,11 +33,11 @@ harm_features = data[harm_col]
 harm_features = harm_features.to_numpy()
 
 #Apply LDA on both separately
-lda_timbre = LDA(n_components=n_topics, random_state=0)
+lda_timbre = LDA(n_components=t_topics, doc_topic_prior=doc_topic_prior, random_state=0)
 lda_timbre.fit(timbre_features)
 topics_timbre = lda_timbre.transform(timbre_features)
 
-lda_harm = LDA(n_components=n_topics, random_state=0)
+lda_harm = LDA(n_components=h_topics, doc_topic_prior=doc_topic_prior, random_state=0)
 lda_harm.fit(harm_features)
 topics_harm = lda_harm.transform(harm_features)
 
@@ -47,31 +55,31 @@ def get_top_components(model, feature_names, n):
     return results
 
 top_components_timbre = get_top_components(lda_timbre, timbre_col, 4)
-if smoothening:
-    top_components_timbre.to_csv(data_path + "Top Components LDA Timbre.csv")
-else:
-    top_components_timbre.to_csv(data_path + "Top Components LDA Timbre without smoothening.csv")
+
+
+
+
+fname = data_path + "Top Components LDA Timbre_" + str(h_topics) + "H" + str(t_topics) + "T" + dtp + ".csv"
+top_components_timbre.to_csv(fname)
+
 top_components_harm = get_top_components(lda_harm, harm_col, 4)
-if smoothening:
-    top_components_harm.to_csv(data_path + "Top Components LDA Harmony.csv")
-else:
- top_components_harm.to_csv(data_path + "Top Components LDA Harmony without smoothening.csv")
+
+fname = data_path + "Top Components LDA Harmony_" + str(h_topics) + "H" + str(t_topics) + "T" + dtp + ".csv"
+top_components_harm.to_csv(fname)
 
 #Assemble topics in a dataframe
-df_harm = pd.DataFrame(topics_harm, columns = ["H-Topic:" + str(i) for i in range(1,n_topics + 1)])
-df_timbre = pd.DataFrame(topics_timbre, columns = ["T-Topic:" + str(i) for i in range(1,n_topics+1)])
+df_harm = pd.DataFrame(topics_harm, columns = ["H-Topic:" + str(i) for i in range(1,h_topics + 1)])
+df_timbre = pd.DataFrame(topics_timbre, columns = ["T-Topic:" + str(i) for i in range(1,t_topics+1)])
 df_topics = pd.concat([df_timbre, df_harm], axis=1)
 
 #Add song title, artist and date
-col_to_keep = ["Song", "Performer", "Year", "Month"] 
+col_to_keep = ["Song", "Performer", "Year", "Month", "Tags"] 
 temp_df = data[col_to_keep]
 df_topics = pd.concat([temp_df, df_topics], axis = 1)
 
 #Save the topics dataframe
-if smoothening:
-    df_topics.to_csv(data_path + "hot100_topics.csv")
-else:
-    df_topics.to_csv(data_path + "hot100_topics_without_smoothening.csv")
+fname = data_path + "hot100_topics_" + str(h_topics) + "H" + str(t_topics) + "T" + dtp + ".csv"
+df_topics.to_csv(fname)
 
 
 print("Topic Modelling Done!")

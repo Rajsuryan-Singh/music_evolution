@@ -1,0 +1,30 @@
+ballad:ballads
+chill:chillout
+rhythm and blues: contemporary rnb,r and b,r&b,rb, rhythm & blues,rhythm and blues,rhythum and blues tag,rnb,rnb
+country : country legends, country pop, country rock, country-rock,modern country
+dance:dance-pop,dancefloor classics,dancehall
+soul: deep soul
+doo wop:doo-wop
+electronic:electronica,electro,electropop
+emo:emo rap
+hip hop:experimental hip hop,gangsta rap, hip-hop,hiphop,rap,trap
+female:female country,female vocalist,female vocalists,female vocals
+folk:folk rock,folk-pop,folk-rock,indie folk
+funk:funk tag,funky
+indie:indie pop,indie rock
+jazz:jazz vocal,jazz rock,saxophone,scat,smooth jazz,trumpet,vocal jazz
+latin: latin freestyle,latin pop,latin rock
+love song:love songs,lovesong
+male:male country,male vocalist,male vocalists,male vocals
+mellow:mellow 70s
+neo soul:neo-soul
+old school:old school classic,old school rap,old school slow jams,old school soul
+oldies:oldies tag
+piano:piano rock
+pop:pop country,pop life,pop music tag,pop punk,pop rock,pop-rock
+progressive:prog,progressive rock
+psychedelic:psychedelic rock
+rock:rock ballad,rock ballads
+rock and roll: rock  roll,rock n roll,rock n roll,rock'n'roll
+slow:slow jam,slow jams,slow jams tag
+synth pop:synth,synthpop

@@ -35,21 +35,21 @@ api_file = directory + "last.fm_api_info.txt"           #replace with the file h
 api_key = open(api_file).read().strip()
 
 #Load the dataframe with all the songs
-songs_df = pd.read_csv(data_path + 'hot100_topics.csv')
+songs_df = pd.read_csv(data_path + 'hot100_features_with_tags.csv')
 songs = songs_df["Song"]
 artists = songs_df["Performer"]
 
 #Initiate search payload
 payload = {
         'api_key': api_key,
-        'method': 'track.getTopTags',
+        'method': 'track.getInfo',
         'format': 'json',
         'track': '',
         'artist': ''
     }
 
 #Search for songs and retrieve 
-all_tags = []
+mbids = []
 for i in tqdm(range(len(songs))):
 
     payload['track'] = songs[i]
@@ -57,20 +57,19 @@ for i in tqdm(range(len(songs))):
     try:
         r = requests_retry_session().get('http://ws.audioscrobbler.com/2.0/',  params=payload)
     except Exception:
-        all_tags.append("")
+        mbids.append("")
     else:
-        if 'toptags' in r.json().keys():
-            tag_json = r.json()['toptags']['tag']
-            tags = [tag['name'] for tag in tag_json[:5] if tag['count']>20]
-            
-            all_tags.append(", ".join(tags))
-        else:
-            all_tags.append("")
+        mbid = ""
+        if "track" in r.json():
+            mbid = r.json()["track"]["mbid"]
+        mbids.append(mbid)
+
+        
 
 
 
-songs_df["Tags"] = all_tags
+songs_df["MB_ID"] = mbids
 
 songs_df.to_csv(data_path + 'hot100_features_with_tags.csv')
 
-print("Tags have been retrieved from last.fm!")
+print("Musicbrainz IDs have been collected!")
