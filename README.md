@@ -7,7 +7,7 @@ The order of to run the scripts for a fresh analysis:
 
 1. get_spotify_previews.py
 
-2. get_t_lex.py *(currently unfinished)*
+2. get_t_lex.py
 
 3. get_h_lex.py
 
