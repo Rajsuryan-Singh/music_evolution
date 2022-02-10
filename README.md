@@ -3,7 +3,7 @@ The methods from the following paper has been reproduced in python to the extent
 >Mauch Matthias, MacCallum Robert M., Levy Mark and Leroi Armand M. 2015 The evolution of popular music: USA 1960–2010R. Soc. open sci.2150081150081
 >https://doi.org/10.1098/rsos.150081
 
-## Prerequisites
+
 All the dependencies can be installed using the following command:
 ```
 pip install -r requirements.txt
